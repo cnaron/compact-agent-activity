@@ -11,7 +11,7 @@ Requires Paseo `>=0.8.0`.
 ## Preview
 
 ### 1. Clean Single-line Summary in Context
-Each agent turn condenses commands, file reads, and edits into a single, compact line (`> Thought · Ran 17 commands · Edited 1 file`), keeping conversation history focused:
+Each agent turn condenses commands, file reads, and edits into a single, compact line (`> Thought · Ran 17 commands · Edited 1 file`), keeping conversation history focused and readable:
 
 ![Folded summary in chat](./images/folded-summary-collapsed.png)
 
@@ -21,7 +21,7 @@ Click anywhere across the entire row to smoothly expand the structured activity 
 ![Expanded detail view](./images/folded-summary-expanded.png)
 
 ### 3. Consecutive Multi-turn Compact Spacing
-Ultra-dense 3px row spacing between consecutive folded activities keeps long multi-turn sessions tight, clean, and clutter-free:
+Ultra-dense 3px row spacing between consecutive folded activities eliminates vertical clutter during multi-step tasks:
 
 ![Dense multi-turn spacing](./images/folded-summary-dense.png)
 
@@ -30,12 +30,10 @@ Ultra-dense 3px row spacing between consecutive folded activities keeps long mul
 ## Highlights
 
 - **Folded summary mode (default)**: Aggregates turn activity into a single, ultra-compact folded line matching modern agent CLI workflows (like Claude Code / OpenCode). Click anywhere across the full width to smoothly expand or collapse full details.
-- **Configurable display modes**: Seamlessly toggle between **Folded** (compact single line per turn) and **Detailed** (individual cards for each tool call and thought) under the plugin's settings panel.
 - **Ultra-compact line spacing**: Optimized vertical footprint with 3px row spacing, keeping multi-round agent interactions clean, tight, and readable.
 - **Natural image sizing & zero-jitter scrolling**: Constrains oversized assistant response images to natural dimensions without full-width stretching, using pure declarative CSS for 100% flicker-free fast scrolling during virtualization.
 - **Touch-optimized mobile experience**: Full-row clickability with generous invisible touch hit-slop (`hitSlop: 8`) for comfortable tapping on mobile devices.
-- **Rich syntax highlighting & AST diffs**: Shell commands and code snippets formatted with Prism; colored file diffs with addition/deletion statistics (`+8 / -0`).
-- **Specialized tool inspectors**: Dedicated cards for GitHub, Exa, shell commands, file edits, agent worktrees, sub-agents, and browser automation.
+- **Configurable display modes**: Seamlessly toggle between **Folded** (compact single line per turn) and **Detailed** (individual cards for each tool call and thought) under the plugin's settings panel.
 
 ---
 
@@ -78,42 +76,6 @@ Reload after installation or changes:
 ```bash
 paseo plugin reload compact-agent-activity
 ```
-
----
-
-## Detailed Inspection Views
-
-### Desktop & Web
-
-**Thought process with file read and inline diff:**
-
-![Desktop thought and diff](./images/desktop-thought-and-diff.png)
-
-**Expanded shell command with formatted output:**
-
-![Desktop shell command](./images/desktop-shell-command.png)
-
-**Interactive agent question row:**
-
-![Ask user question](./images/ask-user-question.png)
-
-**Paseo tool calls with purpose-built detail views:**
-
-![Paseo create-agent card](./images/paseo-create-agent.png)
-
-### Native Mobile (iOS)
-
-**Timeline with active thinking and tool activity:**
-
-![Mobile activity timeline](./images/mobile-activity-timeline.png)
-
-**Expanded shell command with formatted output:**
-
-![Mobile shell command output](./images/mobile-shell-output.png)
-
-**File edit with colored line diff:**
-
-![Mobile file diff](./images/mobile-diff-view.png)
 
 ---
 
