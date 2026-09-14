@@ -64,35 +64,52 @@ paseo plugin reload compact-agent-activity
 
 ## Screenshots
 
-### Desktop & Web
+### Folded Summary Mode (Default)
 
-Thought process with file read and inline diff:
+**1. Clean Single-line Summary in Context**  
+Each agent turn condenses commands, file reads, and edits into a single, compact line (`> Thought · Ran 17 commands · Edited 1 file`), keeping conversation history focused:
+
+![Folded summary in chat](./images/folded-summary-collapsed.png)
+
+**2. On-demand Click-to-Expand Details**  
+Click anywhere across the entire row to smoothly expand the structured activity tree with status icons and sub-item actions:
+
+![Expanded detail view](./images/folded-summary-expanded.png)
+
+**3. Consecutive Multi-turn Compact Spacing**  
+Ultra-dense 3px row spacing between consecutive folded activities keeps long agent sessions tight and clutter-free:
+
+![Dense multi-turn spacing](./images/folded-summary-dense.png)
+
+### Detailed Inspection Views (Desktop & Web)
+
+**Thought process with file read and inline diff:**
 
 ![Desktop thought and diff](./images/desktop-thought-and-diff.png)
 
-Expanded shell command with formatted output:
+**Expanded shell command with formatted output:**
 
 ![Desktop shell command](./images/desktop-shell-command.png)
 
-Interactive agent question row:
+**Interactive agent question row:**
 
 ![Ask user question](./images/ask-user-question.png)
 
-Paseo tool calls use purpose-built detail views for prompts, configuration, results, and status:
+**Paseo tool calls with purpose-built detail views:**
 
 ![Paseo create-agent card](./images/paseo-create-agent.png)
 
-### Native mobile (iOS)
+### Native Mobile (iOS)
 
-Timeline with active thinking and tool activity:
+**Timeline with active thinking and tool activity:**
 
 ![Mobile activity timeline](./images/mobile-activity-timeline.png)
 
-Expanded shell command with formatted output:
+**Expanded shell command with formatted output:**
 
 ![Mobile shell command output](./images/mobile-shell-output.png)
 
-File edit with colored line diff:
+**File edit with colored line diff:**
 
 ![Mobile file diff](./images/mobile-diff-view.png)
 
