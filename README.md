@@ -8,6 +8,25 @@ Requires Paseo `>=0.8.0`.
 
 ---
 
+## Preview
+
+### 1. Clean Single-line Summary in Context
+Each agent turn condenses commands, file reads, and edits into a single, compact line (`> Thought · Ran 17 commands · Edited 1 file`), keeping conversation history focused:
+
+![Folded summary in chat](./images/folded-summary-collapsed.png)
+
+### 2. On-demand Click-to-Expand Details
+Click anywhere across the entire row to smoothly expand the structured activity tree with status icons, diffs, and execution output:
+
+![Expanded detail view](./images/folded-summary-expanded.png)
+
+### 3. Consecutive Multi-turn Compact Spacing
+Ultra-dense 3px row spacing between consecutive folded activities keeps long multi-turn sessions tight, clean, and clutter-free:
+
+![Dense multi-turn spacing](./images/folded-summary-dense.png)
+
+---
+
 ## Highlights
 
 - **Folded summary mode (default)**: Aggregates turn activity into a single, ultra-compact folded line matching modern agent CLI workflows (like Claude Code / OpenCode). Click anywhere across the full width to smoothly expand or collapse full details.
@@ -62,26 +81,9 @@ paseo plugin reload compact-agent-activity
 
 ---
 
-## Screenshots
+## Detailed Inspection Views
 
-### Folded Summary Mode (Default)
-
-**1. Clean Single-line Summary in Context**  
-Each agent turn condenses commands, file reads, and edits into a single, compact line (`> Thought · Ran 17 commands · Edited 1 file`), keeping conversation history focused:
-
-![Folded summary in chat](./images/folded-summary-collapsed.png)
-
-**2. On-demand Click-to-Expand Details**  
-Click anywhere across the entire row to smoothly expand the structured activity tree with status icons and sub-item actions:
-
-![Expanded detail view](./images/folded-summary-expanded.png)
-
-**3. Consecutive Multi-turn Compact Spacing**  
-Ultra-dense 3px row spacing between consecutive folded activities keeps long agent sessions tight and clutter-free:
-
-![Dense multi-turn spacing](./images/folded-summary-dense.png)
-
-### Detailed Inspection Views (Desktop & Web)
+### Desktop & Web
 
 **Thought process with file read and inline diff:**
 
