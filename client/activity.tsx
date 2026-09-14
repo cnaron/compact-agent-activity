@@ -1436,15 +1436,16 @@ function FoldedActivityGroup({
   const containerRef = useRef<View>(null);
 
   useIsomorphicLayoutEffect(() => {
+    if (typeof document === "undefined") return;
     const el = containerRef.current as unknown as HTMLElement | null;
-    if (!el) return;
+    if (!el || typeof el.setAttribute !== "function") return;
     el.setAttribute("data-expanded", expanded ? "true" : "false");
     const parent = el.parentElement;
-    if (parent) {
+    if (parent && typeof parent.setAttribute === "function") {
       parent.setAttribute("data-folded-wrapper", expanded ? "false" : "true");
     }
     return () => {
-      if (parent) {
+      if (parent && typeof parent.removeAttribute === "function") {
         parent.removeAttribute("data-folded-wrapper");
       }
     };
@@ -1484,7 +1485,9 @@ function FoldedActivityGroup({
       paddingHorizontal: 2,
       minHeight: 20,
       gap: 6,
-      cursor: "pointer" as unknown as ViewStyle["cursor"],
+      ...(typeof document !== "undefined"
+        ? { cursor: "pointer" as unknown as ViewStyle["cursor"] }
+        : {}),
     }),
     [],
   );
