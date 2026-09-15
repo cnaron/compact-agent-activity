@@ -1,5 +1,5 @@
 import type { PluginTimelineItemProps } from "@getpaseo/plugin/client";
-import { useSettings, useAgent } from "@getpaseo/plugin/client";
+import { useSettings } from "@getpaseo/plugin/client";
 import { Icon, ScrollView, useRevealedText } from "@getpaseo/plugin/client/react-native";
 import type { ToolCallDetail } from "@getpaseo/protocol/agent-types";
 import React, {
@@ -15,7 +15,6 @@ import React, {
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 import {
-  ActivityIndicator,
   Pressable,
   Text,
   View,
@@ -1440,25 +1439,35 @@ function FoldedActivityGroup({
     const el = containerRef.current as unknown as HTMLElement | null;
     if (!el || typeof el.setAttribute !== "function") return;
     el.setAttribute("data-expanded", expanded ? "true" : "false");
-    const parent = el.parentElement;
-    if (parent && typeof parent.setAttribute === "function") {
-      parent.setAttribute("data-folded-wrapper", expanded ? "false" : "true");
-    }
-    return () => {
-      if (parent && typeof parent.removeAttribute === "function") {
-        parent.removeAttribute("data-folded-wrapper");
+
+    // This row's real DOM parent is frequently a `display: contents`
+    // wrapper (no generated box, so margin on it is a silent no-op) sitting
+    // atop a chain of single-child ancestors before reaching the shared
+    // list. Walk document order directly from this row instead of relying
+    // on a CSS sibling/`:has()` selector, which can't see past that shape.
+    // Two folded rows back to back (nothing else rendered between them)
+    // pull in a bit; anything preceded by real content (text, images,
+    // other turns) keeps the host's own rhythm untouched.
+    let prevIsFold = false;
+    let node: Element | null = el;
+    for (let i = 0; i < 50 && node; i++) {
+      const sibling: Element | null = node.previousElementSibling;
+      if (sibling) {
+        let deepest: Element = sibling;
+        while (deepest.lastElementChild) deepest = deepest.lastElementChild;
+        prevIsFold = deepest.closest?.('[data-testid="folded-activity-group"]') != null;
+        break;
       }
-    };
+      node = node.parentElement;
+    }
+    if (prevIsFold) {
+      el.style.setProperty("margin-top", "-16px", "important");
+    } else {
+      el.style.removeProperty("margin-top");
+    }
   }, [expanded]);
 
   const summaryText = group ? formatGroupSummary(group) : "Activity";
-
-  const isFinished = Boolean(group?.isFinished);
-  const agentStatus = useAgent(agentId, (a) => (isFinished ? undefined : a?.status));
-  const isTurnFinished = Boolean(
-    isFinished || agentStatus === "idle" || agentStatus === "closed",
-  );
-  const isRunning = Boolean(!isTurnFinished && group?.isRunning);
 
   const toggle = useCallback(() => {
     setExpanded((prev) => {
@@ -1540,15 +1549,6 @@ function FoldedActivityGroup({
           size={12}
         />
         <Text style={summaryTextStyle}>{summaryText}</Text>
-        {isRunning ? (
-          <View style={{ marginLeft: 4 }}>
-            <ActivityIndicator
-              size="small"
-              color={theme.colors.accent}
-              style={{ transform: [{ scale: 0.65 }] }}
-            />
-          </View>
-        ) : null}
       </Pressable>
 
       {expanded && group ? (

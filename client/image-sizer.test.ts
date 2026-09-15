@@ -287,7 +287,7 @@ describe("natural image sizer", () => {
     cleanup();
   });
 
-  it("injects declarative style tag with compact folded activity and image rules", () => {
+  it("injects declarative style tag with compact image sizing rules", () => {
     class MockStyleElement {
       attributes = new Map<string, string>();
       textContent = "";
@@ -321,9 +321,6 @@ describe("natural image sizer", () => {
     const cleanup = setupNaturalImageSizing();
     expect(appendedElements.length).toBe(1);
     expect(appendedElements[0].getAttribute("data-plugin")).toBe("colorful-image-sizer");
-    expect(appendedElements[0].textContent).toContain("data-folded-wrapper");
-    expect(appendedElements[0].textContent).toContain("folded-activity-group");
-    expect(appendedElements[0].textContent).toContain("margin-bottom: 3px !important");
     expect(appendedElements[0].textContent).toContain(':has(> [role="img"])');
     expect(appendedElements[0].textContent).toContain('[role="button"]:has([role="img"])');
     expect(appendedElements[0].textContent).toContain(':not([data-testid="attachment-lightbox"] *)');

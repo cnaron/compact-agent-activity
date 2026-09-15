@@ -69,24 +69,6 @@ export function setupNaturalImageSizing(): () => void {
           object-fit: contain !important;
         }
 
-        /* Compact line spacing for folded activity groups */
-        div[data-folded-wrapper="true"] {
-          margin-top: -6px !important;
-          margin-bottom: 3px !important;
-        }
-
-        div[data-folded-wrapper="true"] + div[data-folded-wrapper="true"] {
-          margin-top: 0px !important;
-        }
-
-        div:has(> [data-testid="folded-activity-group"]:not([data-expanded="true"])) {
-          margin-top: -6px !important;
-          margin-bottom: 3px !important;
-        }
-
-        div:has(> [data-testid="folded-activity-group"]:not([data-expanded="true"])) + div:has(> [data-testid="folded-activity-group"]:not([data-expanded="true"])) {
-          margin-top: 0px !important;
-        }
       `;
       head.appendChild(styleEl);
     } catch {
