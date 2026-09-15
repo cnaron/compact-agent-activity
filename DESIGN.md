@@ -279,6 +279,58 @@ The visual system currently lives in:
 
 Keep shared layout values in `useActivityStyles`. Specialized renderers should consume `ActivityStyles` instead of creating a competing style system.
 
+## Host DOM pitfalls (`client/image-sizer.ts` and friends)
+
+This plugin renders through React Native for Web, and part of it
+(`client/image-sizer.ts`) reaches past that abstraction to patch the
+host's own DOM/CSS directly. That's inherently fragile; these are the
+failure modes that actually bit us, in the order they're worth checking:
+
+- **`display: contents` ancestors silently eat margin/padding/border.**
+  The host wraps list items in `display: contents` grouping wrappers with
+  no generated box. Setting `margin`, `padding`, or `border` on one is a
+  no-op — not an error, just nothing happens, which looks identical to
+  "my selector didn't match." Before spending time tuning a spacing/size
+  value that "isn't working," check `getComputedStyle(el).display` on the
+  exact element you're styling. If it's `contents`, style a different
+  element (its child that has a real box, or walk to one).
+- **RN Web doesn't always emit the tag you expect for a given `role`.** A
+  `Pressable`/clickable View can render as an actual `<button>`, not a
+  `<div role="button">`. A selector like `div[role="button"]` silently
+  matches nothing on those. Prefer bare attribute selectors (`[role="button"]`)
+  over `tag[attr]` unless you've confirmed the tag via live inspection.
+- **Global CSS/JS DOM patches leak into every reuse of the same
+  component**, including surfaces you didn't intend to touch — most
+  notably the fullscreen attachment lightbox, which reuses the same
+  `role="img"`/`role="button"` markup as the inline thumbnail. Any rule
+  that isn't obviously scoped to the compact activity feed needs an
+  explicit `:not(...)` exclusion for `[role="dialog"]` /
+  `[data-testid="attachment-lightbox"]` content, added at the selector
+  level (not as a higher-specificity override rule added later — that
+  just trades one fragile assumption for another).
+- **CSS sibling combinators (`+`, `:has(> ...)`) assume shallow, stable
+  nesting.** In a virtualized/streaming timeline, the DOM distance between
+  two "adjacent" items can be many `display: contents` / single-child
+  wrapper levels, so `A + A` never matches even when the two items are
+  visually back to back. Detecting real adjacency needs a JS walk of
+  document order (previous sibling → its deepest descendant, skipping
+  wrappers that generate no box) rather than a CSS selector.
+- **A fixed pixel margin value tuned against one screenshot will be wrong
+  somewhere else.** The host's natural gap before a row varies by what
+  precedes it (message boundary vs. short status line vs. another folded
+  row); the same negative margin that looks perfect in one case reads as
+  "touching" in a tighter context and "still too wide" in a looser one.
+  If a fixed value needs more than one round of tuning, consider
+  measuring the real gap at mount time (`getBoundingClientRect()`) and
+  computing the margin needed to land on a fixed *target* gap instead of
+  guessing an offset — more code, but converges in one pass regardless of
+  the host's underlying variance. (Not currently in use here — reverted
+  in favor of simplicity per owner preference — but worth reaching for if
+  the fixed-value approach starts fighting itself again.)
+- **Production DevTools is disabled in the distributed desktop app**, so
+  none of the above can be confirmed by just opening the inspector. See
+  `NOTES.md` for the RPC-based diagnostic technique that stood in for it.
+
 ## Review checklist
 
 Before merging a UI change, check:
